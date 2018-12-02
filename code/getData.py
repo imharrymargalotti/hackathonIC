@@ -8,6 +8,7 @@ from google.cloud.language import types
 from environset import *
 from mysqlstuff import *
 from neo import *
+from apscheduler.schedulers.background import BackgroundScheduler
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str('/Users/timc/Desktop/redditNLP-c250299d83e5.json')
 # Instantiates a client
