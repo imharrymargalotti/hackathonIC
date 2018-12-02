@@ -23,9 +23,9 @@ print("Connection read only to reddit: " + str(reddit.read_only))
 print()
 
 # assume you have a Reddit instance bound to variable `reddit`
-subreddit = reddit.subreddit('politics')
+subreddit = reddit.subreddit('thedonald')
 
-print(subreddit.display_name)  # Output: redditdev
+print("Sub-Reddit: "+subreddit.display_name)  # Output: redditdev
 
 # empty list to add all comments into
 post_comments = []
@@ -33,7 +33,8 @@ posts = []
 
 
 # assume you have a Subreddit instance bound to variable `subreddit`
-for submission in subreddit.hot(limit=1):
+for submission in subreddit.hot(limit=3):
+    print("Post: "+ submission.title)
     post_info = {
         "subreddit_id" : submission.subreddit_id[3:],
         "subreddit": subreddit.display_name,
@@ -59,29 +60,33 @@ for submission in subreddit.hot(limit=1):
     submission.comments.replace_more(limit=None)
     for comment in submission.comments.list():
         if comment.body != "[removed]" and comment.body != '[deleted]':
-            # author = comment.author
-            # print(author.name)
             # get all info from comments and add to list
-            info = {
-                'post_id': comment.submission.id,
-                'comment_id': comment.id,
-                'permalink': comment.permalink,
-                'author': comment.author.name,
-                'author_id': reddit.redditor(str(comment.author)).id,
-                'date': datetime.datetime.fromtimestamp(comment.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
-                'body': comment.body,
-                'score': comment.score,
-                'parent_id': (comment.parent_id if str(comment.parent_id)[:2] != "t3" else 'NULL')
-            }
-            text = comment.body
-            document = types.Document(
-                content=text,
-                type=enums.Document.Type.PLAIN_TEXT
-            )
-            sentiment = client.analyze_sentiment(document=document).document_sentiment
-            info["sentiment"] = sentiment.score
+            try:
+                # print(comment.author.name)
+                info = {
+                    'post_id': comment.submission.id,
+                    'comment_id': comment.id,
+                    'permalink': comment.permalink,
+                    'author': comment.author.name,
+                    'author_id': reddit.redditor(str(comment.author)).id,
+                    'date': datetime.datetime.fromtimestamp(comment.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
+                    'body': comment.body,
+                    'score': comment.score,
+                    'parent_id': (comment.parent_id if str(comment.parent_id)[:2] != "t3" else 'NULL')
+                }
+                text = comment.body
+                document = types.Document(
+                    content=text,
+                    type=enums.Document.Type.PLAIN_TEXT
+                )
+                sentiment = client.analyze_sentiment(document=document).document_sentiment
+                info["sentiment"] = sentiment.score
+                post_comments.append(info)
+            except:
+                continue
 
-            post_comments.append(info)
+
+
     print("Comments done")
     print()
     #print(post_comments)
@@ -94,8 +99,8 @@ print()
 insert_post(posts)
 insert_comment(post_comments)
 
-print("Starting Neo4j Node Creation")
-print()
+# print("Starting Neo4j Node Creation")
+# print()
 # Create nodes in neo4J with MySQL info
 neo4j_execute()
 print("Nodes Created, Check Console")

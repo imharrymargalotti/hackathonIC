@@ -28,7 +28,7 @@ def insert_post(info):
             val = (i.get('author_id'), i.get('author'))
             cursor.execute(sql, val)
         except:
-            continue
+            print("User already exists")
 
         # create subreddit if it doesn't already exist
         try:
@@ -53,6 +53,7 @@ def insert_post(info):
 def insert_comment(info):
     # create sql query
     cursor = cnx.cursor()
+    count = 0
     for i in info:
         # create user if user id doesn't exist
         try:
@@ -60,7 +61,7 @@ def insert_comment(info):
             val = (i.get('author_id'), i.get('author'))
             cursor.execute(sql, val)
         except:
-            continue
+            count+=1
 
         # insert comment
         sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -68,9 +69,8 @@ def insert_comment(info):
                i.get('sentiment'), i.get('author_id'), i.get('post_id'), 1, i.get('parent_id'))
         cursor.execute(sql, val)
 
-    'eavwie8'
-
     cnx.commit()
+    print("There were "+str(count)+" users who made multiple comments")
 
 
 def pull_all():

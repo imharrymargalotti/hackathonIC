@@ -71,12 +71,15 @@ def simple_relationships(tx):
 
 def neo4j_execute():
     with driver.session() as session:
+        print("Creating Nodes")
+        session.write_transaction(create_nodes)
+        print("Creating Indices")
+        session.write_transaction(set_indices)
+        print("Creating realtionships")
+        session.write_transaction(simple_relationships)
+
+with driver.session() as session:
+    with driver.session() as session:
         session.write_transaction(create_nodes)
         session.write_transaction(set_indices)
         session.write_transaction(simple_relationships)
-
-# with driver.session() as session:
-#     with driver.session() as session:
-#         session.write_transaction(create_nodes)
-#         session.write_transaction(set_indices)
-#         session.write_transaction(simple_relationships)
