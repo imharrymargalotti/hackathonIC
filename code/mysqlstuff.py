@@ -21,29 +21,31 @@ except mysql.connector.Error as err:
 def insert_post(info):
     # create sql query
     cursor = cnx.cursor()
+    for i in info:
+        # create user if user id doesn't exist
+        try:
+            sql = "INSERT INTO Users (id, name) VALUES (%s, %s)"
+            val = (i.get('author_id'), i.get('author'))
+            cursor.execute(sql, val)
+        except:
+            print("User already exists")
 
-    # create user if user id doesn't exist
-    try:
-        sql = "INSERT INTO Users (id, name) VALUES (%s, %s)"
-        val = (info.get('author_id'), info.get('author'))
-        cursor.execute(sql, val)
-    except:
-        print("User exists")
+        # create subreddit if it doesn't already exist
+        try:
+            sql = "INSERT INTO SubReddits (id, name) VALUES (%s, %s)"
+            val = (i.get('subreddit_id'), i.get('subreddit'))
+            cursor.execute(sql, val)
+        except:
+            print("Subreddit already exists")
 
-    # create subreddit if it doesn't already exist
-    try:
-        sql = "INSERT INTO SubReddits (id, name) VALUES (%s, %s)"
-        val = (info.get('subreddit_id'), info.get('subreddit'))
-        cursor.execute(sql, val)
-    except:
-        print("Subreddit exists")
-
-    # insert post
-    sql = "INSERT INTO Posts (id, title, date, link, sentiment, karma, user_id, subreddit_id, subject_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    val = (info.get('post_id'), info.get('title'), info.get('date'), info.get('link'), info.get('sentiment'),
-           info.get('karma'), info.get('author_id'), info.get('subreddit_id'), info.get('subject_id'))
-
-    cursor.execute(sql, val)
+        try:
+            # insert post
+            sql = "INSERT INTO Posts (id, title, date, link, sentiment, karma, user_id, subreddit_id, subject_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (i.get('post_id'), i.get('title'), i.get('date'), i.get('link'), i.get('sentiment'),
+                   i.get('karma'), i.get('author_id'), i.get('subreddit_id'), 1)
+            cursor.execute(sql, val)
+        except:
+            print("Post already exists")
 
     cnx.commit()
 
@@ -57,14 +59,16 @@ def insert_comment(info):
         val = (info.get('author_id'), info.get('author'))
         cursor.execute(sql, val)
     except:
-        print("User exists")
+        print("User already exists")
 
-    # insert comment
-    sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    val = (info.get('comment_id'), info.get('bosy'), info.get('date'), info.get('permalink'), info.get('score'),
-           info.get('sentiment'), info.get('author_id'), info.get('post_id'), info.get('subject_id'), info.get('parent_id'))
-
-    cursor.execute(sql, val)
+    try:
+        # insert comment
+        sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        val = (info.get('comment_id'), info.get('bosy'), info.get('date'), info.get('permalink'), info.get('score'),
+               info.get('sentiment'), info.get('author_id'), info.get('post_id'), 1, info.get('parent_id'))
+        cursor.execute(sql, val)
+    except:
+        print("Comment already exists")
 
     cnx.commit()
 

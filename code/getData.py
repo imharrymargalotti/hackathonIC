@@ -6,6 +6,7 @@ from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 from environset import *
+from mysqlstuff import *
 
 set_praw()
 
@@ -41,7 +42,7 @@ for submission in subreddit.hot(limit=1):
         "subreddit_id" : submission.subreddit_id[3:],
         "subreddit": subreddit.display_name,
         "post_id" : submission.id,
-        "author": submission.author,
+        "author": submission.author.name,
         "author_id": reddit.redditor(str(submission.author)).id,
         "date": datetime.datetime.fromtimestamp(submission.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
         "title": submission.title,
@@ -52,57 +53,59 @@ for submission in subreddit.hot(limit=1):
     print(post_info)
     posts.append(post_info)
 
+    #
+    # submission.comments.replace_more(limit=None)
+    # for comment in submission.comments.list():
+    #     if comment.body != "[removed]":
+    #         # pid = print("post id: " + str(comment.submission.id))
+    #         # print("comment id: " + str(comment.id))
+    #         # print("permalink: " + str(comment.permalink))
+    #         # print("author: " + str(comment.author))
+    #         # print("author id: " + str(reddit.redditor(str(comment.author)).id))
+    #         # print("created time: " + str(comment.created_utc))
+    #         # print("body: " + str(comment.body))
+    #         # print("score: " + str(comment.score))
+    #         # if str(comment.parent_id)[:2] != "t3":
+    #         #     print("parent id: " + str(comment.parent_id)[3:])
+    #         # else:
+    #         #     print("parent id: null")
+    #         # print()
+    #
+    #         # get all info from comments and add to list
+    #         info = {
+    #             'post_id': comment.submission.id,
+    #             'comment_id': comment.id,
+    #             'permalink': comment.permalink,
+    #             'author': comment.author,
+    #             'author_id': reddit.redditor(str(comment.author)).id,
+    #             'date': datetime.datetime.fromtimestamp(comment.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
+    #             'body': comment.body,
+    #             'score': comment.score,
+    #             'parent_id': (comment.parent_id if str(comment.parent_id)[:2] != "t3" else 'NULL')
+    #         }
+    #         post_comments.append(info)
+    #
+    # print(post_comments)
+    #
+    # print()
 
-    submission.comments.replace_more(limit=None)
-    for comment in submission.comments.list():
-        if comment.body != "[removed]":
-            # pid = print("post id: " + str(comment.submission.id))
-            # print("comment id: " + str(comment.id))
-            # print("permalink: " + str(comment.permalink))
-            # print("author: " + str(comment.author))
-            # print("author id: " + str(reddit.redditor(str(comment.author)).id))
-            # print("created time: " + str(comment.created_utc))
-            # print("body: " + str(comment.body))
-            # print("score: " + str(comment.score))
-            # if str(comment.parent_id)[:2] != "t3":
-            #     print("parent id: " + str(comment.parent_id)[3:])
-            # else:
-            #     print("parent id: null")
-            # print()
-
-            # get all info from comments and add to list
-            info = {
-                'post_id': comment.submission.id,
-                'comment_id': comment.id,
-                'permalink': comment.permalink,
-                'author': comment.author,
-                'author_id': reddit.redditor(str(comment.author)).id,
-                'date': datetime.datetime.fromtimestamp(comment.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
-                'body': comment.body,
-                'score': comment.score,
-                'parent_id': (comment.parent_id if str(comment.parent_id)[:2] != "t3" else 'NULL')
-            }
-            post_comments.append(info)
-
-    print(post_comments)
-
-    print()
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str('/Users/timc/Desktop/redditNLP-c250299d83e5.json')
 # Instantiates a client
 client = language.LanguageServiceClient()
 
-# The text to analyze
-text = u'Hello, world!'
-document = types.Document(
-    content=text,
-    type=enums.Document.Type.PLAIN_TEXT)
 
-# Detects the sentiment of the text
-sentiment = client.analyze_sentiment(document=document).document_sentiment
-
-print('Text: {}'.format(text))
-print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
+# # The text to analyze
+# text = u'Hello, world!'
+# document = types.Document(
+#     content=text,
+#     type=enums.Document.Type.PLAIN_TEXT)
+#
+# # Detects the sentiment of the text
+# sentiment = client.analyze_sentiment(document=document).document_sentiment
+#
+# print('Text: {}'.format(text))
+# print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
 
 for p in posts:
     text = p.get("title")
@@ -111,15 +114,18 @@ for p in posts:
         type = enums.Document.Type.PLAIN_TEXT
     )
     sentiment = client.analyze_sentiment(document=document).document_sentiment
-    p["sentiment"] = sentiment
+    p["sentiment"] = sentiment.score
 
-for c in post_comments:
-    text = c.get("body")
-    document = types.Document(
-        content=text,
-        type=enums.Document.Type.PLAIN_TEXT
-    )
-    sentiment = client.analyze_sentiment(document=document).document_sentiment
-    c["sentiment"] = sentiment
+# for c in post_comments:
+#     text = c.get("body")
+#     document = types.Document(
+#         content=text,
+#         type=enums.Document.Type.PLAIN_TEXT
+#     )
+#     sentiment = client.analyze_sentiment(document=document).document_sentiment
+#     c["sentiment"] = sentiment.score
 
+# Insert data into MySQL
+# insert_post(posts)
+# insert_comment(post_comments)
 

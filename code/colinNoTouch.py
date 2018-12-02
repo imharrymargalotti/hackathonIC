@@ -56,7 +56,6 @@ def main():
 
     print('Text: {}'.format(text))
     print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
-    print(result)
 
 
 
