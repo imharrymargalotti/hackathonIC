@@ -52,23 +52,24 @@ def insert_post(info):
 def insert_comment(info):
     # create sql query
     cursor = cnx.cursor()
+    for i in info:
+        # create user if user id doesn't exist
+        try:
+            sql = "INSERT INTO Users (id, name) VALUES (%s, %s)"
+            val = (i.get('author_id'), i.get('author'))
+            cursor.execute(sql, val)
+        except:
+            print("User already exists")
 
-    # create user if user id doesn't exist
-    try:
-        sql = "INSERT INTO Users (id, name) VALUES (%s, %s)"
-        val = (info.get('author_id'), info.get('author'))
-        cursor.execute(sql, val)
-    except:
-        print("User already exists")
+        try:
+            # insert comment
+            sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (i.get('comment_id'), i.get('bosy'), i.get('date'), i.get('permalink'), i.get('score'),
+                   i.get('sentiment'), i.get('author_id'), i.get('post_id'), 1, i.get('parent_id'))
+            cursor.execute(sql, val)
+        except:
+            print("Comment already exists")
 
-    try:
-        # insert comment
-        sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        val = (info.get('comment_id'), info.get('bosy'), info.get('date'), info.get('permalink'), info.get('score'),
-               info.get('sentiment'), info.get('author_id'), info.get('post_id'), 1, info.get('parent_id'))
-        cursor.execute(sql, val)
-    except:
-        print("Comment already exists")
 
     cnx.commit()
 
