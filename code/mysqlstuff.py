@@ -49,6 +49,7 @@ def insert_post(info):
 
     cnx.commit()
 
+
 def insert_comment(info):
     # create sql query
     cursor = cnx.cursor()
@@ -59,17 +60,15 @@ def insert_comment(info):
             val = (i.get('author_id'), i.get('author'))
             cursor.execute(sql, val)
         except:
-            print("User already exists")
+            continue
 
-        try:
-            # insert comment
-            sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (i.get('comment_id'), i.get('bosy'), i.get('date'), i.get('permalink'), i.get('score'),
-                   i.get('sentiment'), i.get('author_id'), i.get('post_id'), 1, i.get('parent_id'))
-            cursor.execute(sql, val)
-        except:
-            print("Comment already exists")
+        # insert comment
+        sql = "INSERT INTO Comments (id, body, date, link, karma, sentiment, user_id, post_id, subject_id, parent_id ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        val = (i.get('comment_id'), i.get('body'), i.get('date'), i.get('permalink'), i.get('score'),
+               i.get('sentiment'), i.get('author_id'), i.get('post_id'), 1, i.get('parent_id'))
+        cursor.execute(sql, val)
 
+    'eavwie8'
 
     cnx.commit()
 
