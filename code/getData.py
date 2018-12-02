@@ -5,9 +5,12 @@ import os
 from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
+from environset import *
 
-reddit = praw.Reddit(client_id='KIjD0iw7Ppx4hA',
-                     client_secret='8CI91ITeuvjHhHH15V1thu6yDdA',
+set_praw()
+
+reddit = praw.Reddit(client_id=os.environ.get("CLIENT_ID"),
+                     client_secret=os.environ.get("CLIENT_SECRET"),
                      user_agent='Get Data by /u/IthacaCompSci')
 
 print("Connection read only to reddit: " + str(reddit.read_only))
@@ -84,10 +87,6 @@ for submission in subreddit.hot(limit=1):
     print(post_comments)
 
     print()
-
-#this is harrys section do not write below this only above
-
-
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str('/Users/timc/Desktop/redditNLP-c250299d83e5.json')
 # Instantiates a client

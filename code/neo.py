@@ -6,9 +6,12 @@ https://github.com/tclerico
 from neo4j.v1 import GraphDatabase
 from mysqlstuff import *
 import os
+from environset import *
 
 uri = "bolt://localhost:7687"
-driver = GraphDatabase.driver(uri, auth=("neo4j", "Blazer1992"))
+set_pass()
+password = os.environ.get("PASSWORD")
+driver = GraphDatabase.driver(uri, auth=("neo4j", password))
 
 
 def create_nodes(tx):
