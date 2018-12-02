@@ -70,10 +70,11 @@ def pull_all():
 
     users = "SELECT * FROM Users"
     subreddits = "SELECT * FROM SubReddits"
+    # subjects = "SELECT * FROM Subjects"
     posts = "SELECT * FROM Posts"
     comments = "SELECT * FROM Comments"
-    subreddit_sentiment = "SELECT * FROM subrsentiment"
-    usersentiment = "SELECT * FROM usersentiment"
+    # subreddit_sentiment = "SELECT * FROM subrsentiment"
+    # usersentiment = "SELECT * FROM usersentiment"
 
     pull = dict()
 
@@ -81,14 +82,16 @@ def pull_all():
     pull["users"] = cursor.fetchall()
     cursor.execute(subreddits)
     pull["subreddits"] = cursor.fetchall()
+    # cursor.execute(subjects)
+    # pull["subjects"] = cursor.fetchall()
     cursor.execute(posts)
     pull["posts"] = cursor.fetchall()
     cursor.execute(comments)
     pull["comments"] = cursor.fetchall()
-    cursor.execute(subreddit_sentiment)
-    pull["subreddit_sentiment"] = cursor.fetchall()
-    cursor.execute(usersentiment)
-    pull["user_sentiment"] = cursor.fetchall()
+    # cursor.execute(subreddit_sentiment)
+    # pull["subreddit_sentiment"] = cursor.fetchall()
+    # cursor.execute(usersentiment)
+    # pull["user_sentiment"] = cursor.fetchall()
 
     return pull
 
