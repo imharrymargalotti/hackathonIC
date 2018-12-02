@@ -1,3 +1,8 @@
+'''
+Created by Tim Clerico on Saturday December 1st
+https://github.com/tclerico
+'''
+
 import mysql.connector
 from mysql.connector import errorcode
 
