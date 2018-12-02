@@ -102,5 +102,6 @@ insert_comment(post_comments)
 # print("Starting Neo4j Node Creation")
 # print()
 # Create nodes in neo4J with MySQL info
+# Pulls entire MySQL db -> only use when neo4j is clear or db has unique data
 neo4j_execute()
 print("Nodes Created, Check Console")

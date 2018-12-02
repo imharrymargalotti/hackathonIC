@@ -105,5 +105,16 @@ def pull_all():
     return pull
 
 
+def get_comment():
+    cursor = cnx.cursor()
+
+    sql = "Select * from comments"
+    cursor.execute(sql)
+
+    result = cursor.fetchall()
+
+    return result
+
+
 
 
