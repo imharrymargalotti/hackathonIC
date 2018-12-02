@@ -63,3 +63,35 @@ def insert_comment(info):
 
     cnx.commit()
 
+
+def pull_all():
+
+    cursor = cnx.cursor()
+
+    users = "SELECT * FROM Users"
+    subreddits = "SELECT * FROM SubReddits"
+    posts = "SELECT * FROM Posts"
+    comments = "SELECT * FROM Comments"
+    subreddit_sentiment = "SELECT * FROM subrsentiment"
+    usersentiment = "SELECT * FROM usersentiment"
+
+    pull = dict()
+
+    cursor.execute(users)
+    pull["users"] = cursor.fetchall()
+    cursor.execute(subreddits)
+    pull["subreddits"] = cursor.fetchall()
+    cursor.execute(posts)
+    pull["posts"] = cursor.fetchall()
+    cursor.execute(comments)
+    pull["comments"] = cursor.fetchall()
+    cursor.execute(subreddit_sentiment)
+    pull["subreddit_sentiment"] = cursor.fetchall()
+    cursor.execute(usersentiment)
+    pull["user_sentiment"] = cursor.fetchall()
+
+    return pull
+
+
+
+

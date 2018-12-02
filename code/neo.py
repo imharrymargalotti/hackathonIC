@@ -1,4 +1,5 @@
 from neo4j.v1 import GraphDatabase
+from mysqlstuff import *
 
 uri = "bolt://localhost:7687"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "Blazer1992"))
@@ -17,6 +18,8 @@ def print_friends(tx, name):
 
 def schema(tx):
     tx.run("CREATE (a:Test {name: 'TIM'})")
+
+
 
 
 with driver.session() as session:
