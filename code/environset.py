@@ -10,5 +10,5 @@ def set_path():
 
 
 def set_praw():
-    os.environ['CLIENT_ID'] = "KIjD0iw7Ppx4hA"
-    os.environ['CLIENT_SECRET'] = "8CI91ITeuvjHhHH15V1thu6yDdA"
+    os.environ['CLIENT_ID'] = ""
+    os.environ['CLIENT_SECRET'] = ""
