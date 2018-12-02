@@ -68,6 +68,7 @@ def set_indices(tx):
 def simple_relationships(tx):
     tx.run("match (u:User), (p:Post) where u.id=p.user_id Create (u)-[:Posted]->(p)")
     tx.run("match (u:User), (c:Comment) where u.id=c.user_id Create (u)-[:Commented]->(c)")
+    tx.run("match (p:Post), (c:Comment) where p.id=c.post_id Create (c)-[:Comment_of]->(p)")
 
 def neo4j_execute():
     with driver.session() as session:
