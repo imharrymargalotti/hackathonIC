@@ -28,7 +28,7 @@ def insert_post(info):
             val = (i.get('author_id'), i.get('author'))
             cursor.execute(sql, val)
         except:
-            print("User already exists")
+            continue
 
         # create subreddit if it doesn't already exist
         try:

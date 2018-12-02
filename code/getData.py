@@ -53,7 +53,7 @@ for submission in subreddit.hot(limit=1):
     )
     sentiment = client.analyze_sentiment(document=document).document_sentiment
     post_info["sentiment"] = sentiment.score
-    print(post_info)
+    #print(post_info)
     posts.append(post_info)
 
     submission.comments.replace_more(limit=None)
@@ -84,7 +84,7 @@ for submission in subreddit.hot(limit=1):
             post_comments.append(info)
     print("Comments done")
     print()
-    print(post_comments)
+    #print(post_comments)
 
 
 print("Starting MySQL Inserts")
