@@ -15,12 +15,12 @@ def print_friends(tx, name):
         print(record["friend.name"])
 
 
-def create_test(tx, name):
-    tx.run("MERGE (a:Test {name: $name})", name=name)
+def schema(tx):
+    tx.run("CREATE (a:Test {name: 'TIM'})")
 
 
 with driver.session() as session:
-    session.write_transaction(create_test, "Tim")
+    session.write_transaction(schema)
     # session.write_transaction(add_friend, "Arthur", "Guinevere")
     # session.write_transaction(add_friend, "Arthur", "Lancelot")
     # session.write_transaction(add_friend, "Arthur", "Merlin")
