@@ -116,5 +116,4 @@ def get_comment():
     return result
 
 
-
-
+def update_sentiments():
